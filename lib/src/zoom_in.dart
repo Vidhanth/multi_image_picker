@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart'
+import 'package:flutter/material.dart';
 
 class ZoomIn extends StatefulWidget {
   final Key key;
