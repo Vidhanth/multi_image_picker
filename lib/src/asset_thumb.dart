@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multi_image_picker/src/asset.dart';
+import 'zoom_in.dart';
 
 class AssetThumb extends StatefulWidget {
-  /// The asset we want to show thumb for.
+  
   final Asset asset;
 
-  /// The thumb width
   final int width;
 
-  /// The thumb height
   final int height;
 
-  /// The thumb quality
   final int quality;
 
-  /// This is the widget that will be displayed while the
-  /// thumb is loading.
+  final double radius;
+
   final Widget spinner;
 
   const AssetThumb({
@@ -25,6 +23,7 @@ class AssetThumb extends StatefulWidget {
     @required this.width,
     @required this.height,
     this.quality = 100,
+    this.radius = 0,
     this.spinner = const Center(
       child: SizedBox(
         width: 50,
@@ -44,6 +43,7 @@ class _AssetThumbState extends State<AssetThumb> {
   int get width => widget.width;
   int get height => widget.height;
   int get quality => widget.quality;
+  double get radius => widget.radius;
   Asset get asset => widget.asset;
   Widget get spinner => widget.spinner;
 
@@ -84,11 +84,16 @@ class _AssetThumbState extends State<AssetThumb> {
     if (_thumbData == null) {
       return spinner;
     }
-    return Image.memory(
-      _thumbData.buffer.asUint8List(),
-      key: ValueKey(asset.identifier),
-      fit: BoxFit.cover,
-      gaplessPlayback: true,
+    return ZoomIn(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: Image.memory(
+          _thumbData.buffer.asUint8List(),
+          key: ValueKey(asset.identifier),
+          fit: BoxFit.cover,
+          gaplessPlayback: true,
+        ),
+      )
     );
   }
 }
